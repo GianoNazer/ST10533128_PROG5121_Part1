@@ -5,16 +5,16 @@ target/
 nbproject/private/
 build/
 nbbuild/
-list/
-nblist/
+dist/
+nbdist/
 .nb-gradle/
 
 #Compiled Java class files
 *.class
 
-#Compiled jar files
+#Compiled jar files (Keep snapshot jars)
 *.jar
-l*-SNAPSHOT.jar
+!*-SNAPSHOT.jar
 
 # System files
 .DS_Store
