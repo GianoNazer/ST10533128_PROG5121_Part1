@@ -94,9 +94,6 @@ public class MessageTest {
         assertEquals("Press 0 to delete the message.", msg.sentMessage(2));
     }
 
-    // =========================
-    // OVERLOAD SUPPORT TEST (optional safety)
-    // =========================
 
     @Test
     public void testDefaultSend() {
