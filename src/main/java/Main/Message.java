@@ -179,6 +179,10 @@ public String sentMessage() {
     // =========================
     public void storeMessage() {
         System.out.println("Message stored.");
+        
+        storedMessages.add(messageText);
+        messageHashes.add(messageHash);
+        messageIDs.add(messageID);
 
         JSONObject obj = new JSONObject();
 
