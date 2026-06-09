@@ -129,12 +129,20 @@ private static List<String> messageIDs = new ArrayList<>();
 
         switch (option) {
             case 1:
+                sentMessages.add(messageText);
+                messageHashes.add(messageHash);
+                messageIDs.add(messageID);
                 return "Message successfully sent.";
 
             case 2:
+                disregardedMessages.add(messageText);
+                messageIDs.add(messageID);
                 return "Press 0 to delete the message.";
 
             case 3:
+                storedMessages.add(messageText);
+                messageHashes.add(messageHash);
+                messageIDs.add(messageID);
                 storeMessage();
                 return "Message successfully stored.";
 
