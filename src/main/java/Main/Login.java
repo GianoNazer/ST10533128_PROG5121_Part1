@@ -36,7 +36,7 @@ public class Login {
                  hasSpecial = true;
              }
          }
-         return password.length() >= 8 && hasCapital && hasSpecial;
+         return password.length() >= 8 && hasCapital && hasSpecial && hasNumber;
      }
      
      //Cellphone Validation
@@ -80,5 +80,5 @@ public class Login {
          }
      }
      
-     
+  
 }

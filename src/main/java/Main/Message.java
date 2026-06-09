@@ -91,11 +91,17 @@ public class Message {
         String[] words = messageText.split(" ");
 
         String firstWord = words[0];
-        String lastWord = words[words.length - 1];
+        String middleWord;
 
-        String hash = idPart + ":" + messageNumber + ":" + firstWord + lastWord;
+    if (words.length >= 2) {
+        middleWord = words[words.length - 2];
+    } else {
+        middleWord = words[0];
+    }
 
-        return hash.toUpperCase();
+    String hash = idPart + ":" + messageNumber + ":" + firstWord + middleWord;
+
+    return hash.toUpperCase();
     }
 
     // =========================
