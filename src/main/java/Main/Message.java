@@ -21,6 +21,12 @@ public class Message {
     private String recipient;
     private String messageText;
     private String messageHash;
+    
+    private static List<String> sentMessages = new ArrayList<>();
+private static List<String> disregardedMessages = new ArrayList<>();
+private static List<String> storedMessages = new ArrayList<>();
+private static List<String> messageHashes = new ArrayList<>();
+private static List<String> messageIDs = new ArrayList<>();
 
     private static int totalMessages = 0;
 
