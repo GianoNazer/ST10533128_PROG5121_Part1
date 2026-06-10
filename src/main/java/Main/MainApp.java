@@ -164,33 +164,33 @@ else {
         switch (choice.toLowerCase()) {
 
             case "a":
-                System.out.println(Message.displayStoredMessages());
+                Message.displayStoredMessages();
                 break;
 
             case "b":
-                System.out.println(Message.displayLongestMessage());
+                Message.displayLongestMessage();
                 break;
 
             case "c":
                 System.out.print("Enter Message ID: ");
                 String id = input.nextLine();
-                System.out.println(Message.searchByMessageID(id));
+                Message.searchByMessageID(id);
                 break;
 
             case "d":
                 System.out.print("Enter Recipient Number: ");
                 String recipient = input.nextLine();
-                System.out.println(Message.searchByRecipient(recipient));
+                Message.searchByRecipient(recipient);
                 break;
 
             case "e":
                 System.out.print("Enter Message Hash: ");
                 String hash = input.nextLine();
-                System.out.println(Message.deleteByHash(hash));
+                Message.deleteByHash(hash);
                 break;
 
             case "f":
-                System.out.println(Message.printMessages());
+                Message.fullReport();
                 break;
 
             case "g":
