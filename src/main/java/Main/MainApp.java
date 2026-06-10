@@ -127,7 +127,7 @@ case 3:
     running = false;
     break;
     case 4:
-    System.out.println("Stored Messages Menu");
+    storedMessagesMenu(input);
     break;
 
 default:
@@ -141,6 +141,66 @@ default:
 else {
     System.out.println("Login failed. Exiting application.");
 }
+    }
+       //STORED MESSAGES
+       public static void storedMessagesMenu(Scanner input) {
+
+    boolean back = false;
+
+    while (!back) {
+
+        System.out.println("\n=== STORED MESSAGES MENU ===");
+        System.out.println("a) Display all stored messages");
+        System.out.println("b) Display longest message");
+        System.out.println("c) Search by message ID");
+        System.out.println("d) Search by recipient");
+        System.out.println("e) Delete by message hash");
+        System.out.println("f) Display full report");
+        System.out.println("g) Back to Main Menu");
+
+        System.out.print("Choose an option: ");
+        String choice = input.nextLine();
+
+        switch (choice.toLowerCase()) {
+
+            case "a":
+                System.out.println(Message.displayStoredMessages());
+                break;
+
+            case "b":
+                System.out.println(Message.displayLongestMessage());
+                break;
+
+            case "c":
+                System.out.print("Enter Message ID: ");
+                String id = input.nextLine();
+                System.out.println(Message.searchByMessageID(id));
+                break;
+
+            case "d":
+                System.out.print("Enter Recipient Number: ");
+                String recipient = input.nextLine();
+                System.out.println(Message.searchByRecipient(recipient));
+                break;
+
+            case "e":
+                System.out.print("Enter Message Hash: ");
+                String hash = input.nextLine();
+                System.out.println(Message.deleteByHash(hash));
+                break;
+
+            case "f":
+                System.out.println(Message.printMessages());
+                break;
+
+            case "g":
+                back = true;
+                break;
+
+            default:
+                System.out.println("Invalid option.");
+        }
+    }
     }
 }
                 
