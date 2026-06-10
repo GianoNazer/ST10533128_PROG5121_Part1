@@ -220,47 +220,55 @@ public String sentMessage() {
         System.out.println("Longest message: " + longest);
     }
 
-    public static void searchByMessageID(String id) {
+    public static String searchByMessageID(String id) {
         for (int i = 0; i < messageIDs.size(); i++) {
-            if (messageIDs.get(i).equals(id)) {
-                System.out.println(storedMessages.get(i));
-                return;
-            }
-        }
-        System.out.println("Message ID not found.");
-    }
 
-    public static void searchByRecipient(String recipient) {
-        boolean found = false;
-
-        for (int i = 0; i < recipients.size(); i++) {
-            if (recipients.get(i).equals(recipient)) {
-                System.out.println(storedMessages.get(i));
-                found = true;
-            }
-        }
-
-        if (!found) {
-            System.out.println("No messages found for recipient.");
+        if (messageIDs.get(i).equals(id)) {
+            return storedMessages.get(i);
         }
     }
 
-    public static void deleteByHash(String hash) {
-        for (int i = 0; i < messageHashes.size(); i++) {
-            if (messageHashes.get(i).equals(hash)) {
+    return "Message not found.";
+}
 
-                messageHashes.remove(i);
-                storedMessages.remove(i);
-                messageIDs.remove(i);
-                recipients.remove(i);
+    public static String searchByRecipient(String recipient) {
 
-                System.out.println("Message deleted successfully.");
-                return;
-            }
+    StringBuilder results = new StringBuilder();
+
+    for (int i = 0; i < recipients.size(); i++) {
+
+        if (recipients.get(i).equals(recipient)) {
+
+            results.append(storedMessages.get(i)).append("\n");
         }
-
-        System.out.println("Message hash not found.");
     }
+
+    if (results.length() == 0) {
+        return "No messages found for recipient.";
+    }
+
+    return results.toString();
+}
+
+    public static String deleteByHash(String hash) {
+
+    for (int i = 0; i < messageHashes.size(); i++) {
+
+        if (messageHashes.get(i).equals(hash)) {
+
+            String deletedMessage = storedMessages.get(i);
+
+            messageHashes.remove(i);
+            storedMessages.remove(i);
+            messageIDs.remove(i);
+            recipients.remove(i);
+
+            return "Message: " + deletedMessage + " successfully deleted.";
+        }
+    }
+
+    return "Hash not found.";
+}
 
     public static void fullReport() {
         for (int i = 0; i < storedMessages.size(); i++) {
