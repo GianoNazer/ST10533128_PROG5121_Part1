@@ -7,6 +7,8 @@ package Main;
 import org.json.JSONObject;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author Student
@@ -27,6 +29,7 @@ private static List<String> disregardedMessages = new ArrayList<>();
 private static List<String> storedMessages = new ArrayList<>();
 private static List<String> messageHashes = new ArrayList<>();
 private static List<String> messageIDs = new ArrayList<>();
+private static List<String> recipients = new ArrayList<>();
 
     private static int totalMessages = 0;
 
