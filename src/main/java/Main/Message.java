@@ -9,6 +9,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.BufferedReader;
+import java.io.FileReader;
 /**
  *
  * @author Student
@@ -279,6 +281,28 @@ public String sentMessage() {
             System.out.println("----------------------");
         }
     }
+    public static void loadStoredMessages() {
+
+    // Attribution: org.json library
+    // https://mvnrepository.com/artifact/org.json/json
+
+    try (BufferedReader br = new BufferedReader(new FileReader("messages.json"))) {
+
+        String line;
+
+        while ((line = br.readLine()) != null) {
+
+            JSONObject obj = new JSONObject(line);
+
+            String messageText = obj.getString("messageText");
+
+            storedMessages.add(messageText);
+        }
+
+    } catch (IOException e) {
+        System.out.println("No stored messages file found. Starting fresh.");
+    }
+}
 }
     
 
