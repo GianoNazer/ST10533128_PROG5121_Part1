@@ -178,14 +178,11 @@ public String sentMessage() {
     }
 
     // =========================
-    // Store Message
+    // Store to JSON file
     // =========================
     public void storeMessage() {
         System.out.println("Message stored.");
         
-        storedMessages.add(messageText);
-        messageHashes.add(messageHash);
-        messageIDs.add(messageID);
 
         JSONObject obj = new JSONObject();
 
@@ -202,7 +199,78 @@ public String sentMessage() {
         }
     }
     
-    
+    // =========================
+    // Stored messgages Sub menu
+    // =========================
+    public static void displayStoredMessages() {
+        for (String msg : storedMessages) {
+            System.out.println(msg);
+        }
+    }
+
+    public static void displayLongestMessage() {
+        String longest = "";
+
+        for (String msg : storedMessages) {
+            if (msg.length() > longest.length()) {
+                longest = msg;
+            }
+        }
+
+        System.out.println("Longest message: " + longest);
+    }
+
+    public static void searchByMessageID(String id) {
+        for (int i = 0; i < messageIDs.size(); i++) {
+            if (messageIDs.get(i).equals(id)) {
+                System.out.println(storedMessages.get(i));
+                return;
+            }
+        }
+        System.out.println("Message ID not found.");
+    }
+
+    public static void searchByRecipient(String recipient) {
+        boolean found = false;
+
+        for (int i = 0; i < recipients.size(); i++) {
+            if (recipients.get(i).equals(recipient)) {
+                System.out.println(storedMessages.get(i));
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("No messages found for recipient.");
+        }
+    }
+
+    public static void deleteByHash(String hash) {
+        for (int i = 0; i < messageHashes.size(); i++) {
+            if (messageHashes.get(i).equals(hash)) {
+
+                messageHashes.remove(i);
+                storedMessages.remove(i);
+                messageIDs.remove(i);
+                recipients.remove(i);
+
+                System.out.println("Message deleted successfully.");
+                return;
+            }
+        }
+
+        System.out.println("Message hash not found.");
+    }
+
+    public static void fullReport() {
+        for (int i = 0; i < storedMessages.size(); i++) {
+            System.out.println("ID: " + messageIDs.get(i));
+            System.out.println("Recipient: " + recipients.get(i));
+            System.out.println("Hash: " + messageHashes.get(i));
+            System.out.println("Message: " + storedMessages.get(i));
+            System.out.println("----------------------");
+        }
+    }
 }
     
 
