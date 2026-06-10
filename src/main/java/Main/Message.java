@@ -74,7 +74,7 @@ public static List<String> recipients = new ArrayList<>();
     // Recipient Validation
     // =========================
     public String checkRecipientCell() {
-        if (recipient.startsWith("+27") && recipient.length() <= 12) {
+        if ((recipient.startsWith("+27") && recipient.length() <= 12) || recipient.length() == 10){
             return "Cell phone number successfully captured.";
         } else {
             return "Cell phone number is incorrectly formatted or does not contain an international code. Please correct the number and try again.";
@@ -96,24 +96,26 @@ public static List<String> recipients = new ArrayList<>();
     // =========================
     // Message Hash
     // =========================
-    public String createMessageHash() {
-        String idPart = messageID.substring(0, 2);
+   public String createMessageHash() {
 
-        String[] words = messageText.split(" ");
+    String idPart = "00";
 
-        String firstWord = words[0];
-        String middleWord;
+    String[] words = messageText.trim().split(" ");
 
-    if (words.length >= 2) {
-        middleWord = words[words.length - 2];
+    String firstWord = words[0].toUpperCase();
+
+    String middleWord;
+
+    if (words.length >= 3) {
+        middleWord = words[words.length / 2].toUpperCase(); // true middle word
+    } else if (words.length == 2) {
+        middleWord = words[1].toUpperCase();
     } else {
-        middleWord = words[0];
+        middleWord = words[0].toUpperCase();
     }
 
-    String hash = idPart + ":" + messageNumber + ":" + firstWord + middleWord;
-
-    return hash.toUpperCase();
-    }
+    return idPart + ":" + messageNumber + ":" + firstWord + middleWord;
+}
 
     // =========================
     // Send / Disregard / Store
@@ -138,12 +140,11 @@ public static List<String> recipients = new ArrayList<>();
                 messageHashes.add(messageHash);
                 messageIDs.add(messageID);
                 recipients.add(recipient);
-                return "Message successfully sent.";
+                return "Message sent successfully.";
 
             case 2:
-                disregardedMessages.add(messageText);
-                messageIDs.add(messageID);
-                return "Press 0 to delete the message.";
+                 disregardedMessages.add(messageText);
+                 return "Press 0 to delete the message.";
 
             case 3:
                 storedMessages.add(messageText);
@@ -213,9 +214,11 @@ public String sentMessage() {
     }
 
     public static String displayLongestMessage() {
+
     String longest = "";
 
-    for (String msg : storedMessages) {
+    for (String msg : sentMessages) {
+
         if (msg.length() > longest.length()) {
             longest = msg;
         }
@@ -225,10 +228,14 @@ public String sentMessage() {
 }
 
     public static String searchByMessageID(String id) {
-        for (int i = 0; i < messageIDs.size(); i++) {
+
+    for (int i = 0; i < messageIDs.size(); i++) {
 
         if (messageIDs.get(i).equals(id)) {
-            return storedMessages.get(i);
+
+            if (i < sentMessages.size()) {
+                return sentMessages.get(i);
+            }
         }
     }
 
@@ -243,7 +250,9 @@ public String sentMessage() {
 
         if (recipients.get(i).equals(recipient)) {
 
-            results.append(storedMessages.get(i)).append("\n");
+            if (i < sentMessages.size()) {
+                results.append(sentMessages.get(i)).append("\n");
+            }
         }
     }
 
@@ -260,12 +269,19 @@ public String sentMessage() {
 
         if (messageHashes.get(i).equals(hash)) {
 
-            String deletedMessage = storedMessages.get(i);
+            String deletedMessage = "";
+
+            if (i < sentMessages.size()) {
+                deletedMessage = sentMessages.get(i);
+                sentMessages.remove(i);
+            }
 
             messageHashes.remove(i);
-            storedMessages.remove(i);
             messageIDs.remove(i);
-            recipients.remove(i);
+
+            if (i < recipients.size()) {
+                recipients.remove(i);
+            }
 
             return "Message: " + deletedMessage + " successfully deleted.";
         }
@@ -275,20 +291,30 @@ public String sentMessage() {
 }
 
     public static String fullReport() {
-        StringBuilder report = new StringBuilder();
 
-    report.append("=== MESSAGE REPORT ===\n");
+    StringBuilder report = new StringBuilder();
+
+    report.append("=== Message Report ===\n");
 
     int size = Math.min(
-        Math.min(sentMessages.size(), messageHashes.size()),
-        recipients.size()
+            sentMessages.size(),
+            Math.min(messageHashes.size(), recipients.size())
     );
 
     for (int i = 0; i < size; i++) {
 
-        report.append("Message Hash: ").append(messageHashes.get(i)).append("\n");
-        report.append("Recipient: ").append(recipients.get(i)).append("\n");
-        report.append("Message: ").append(sentMessages.get(i)).append("\n");
+        report.append("Message Hash: ")
+              .append(messageHashes.get(i))
+              .append("\n");
+
+        report.append("Recipient: ")
+              .append(recipients.get(i))
+              .append("\n");
+
+        report.append("Message: ")
+              .append(sentMessages.get(i))
+              .append("\n");
+
         report.append("----------------------\n");
     }
 
