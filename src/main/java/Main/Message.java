@@ -26,12 +26,12 @@ public class Message {
     private String messageText;
     private String messageHash;
     
-    private static List<String> sentMessages = new ArrayList<>();
-private static List<String> disregardedMessages = new ArrayList<>();
-private static List<String> storedMessages = new ArrayList<>();
-private static List<String> messageHashes = new ArrayList<>();
-private static List<String> messageIDs = new ArrayList<>();
-private static List<String> recipients = new ArrayList<>();
+public static List<String> sentMessages = new ArrayList<>();
+public static List<String> disregardedMessages = new ArrayList<>();
+public static List<String> storedMessages = new ArrayList<>();
+public static List<String> messageHashes = new ArrayList<>();
+public static List<String> messageIDs = new ArrayList<>();
+public static List<String> recipients = new ArrayList<>();
 
     private static int totalMessages = 0;
 
@@ -137,6 +137,7 @@ private static List<String> recipients = new ArrayList<>();
                 sentMessages.add(messageText);
                 messageHashes.add(messageHash);
                 messageIDs.add(messageID);
+                recipients.add(recipient);
                 return "Message successfully sent.";
 
             case 2:
@@ -148,6 +149,7 @@ private static List<String> recipients = new ArrayList<>();
                 storedMessages.add(messageText);
                 messageHashes.add(messageHash);
                 messageIDs.add(messageID);
+                recipients.add(recipient);
                 storeMessage();
                 return "Message successfully stored.";
 
@@ -210,17 +212,17 @@ public String sentMessage() {
         }
     }
 
-    public static void displayLongestMessage() {
-        String longest = "";
+    public static String displayLongestMessage() {
+    String longest = "";
 
-        for (String msg : storedMessages) {
-            if (msg.length() > longest.length()) {
-                longest = msg;
-            }
+    for (String msg : storedMessages) {
+        if (msg.length() > longest.length()) {
+            longest = msg;
         }
-
-        System.out.println("Longest message: " + longest);
     }
+
+    return longest;
+}
 
     public static String searchByMessageID(String id) {
         for (int i = 0; i < messageIDs.size(); i++) {
@@ -272,15 +274,26 @@ public String sentMessage() {
     return "Hash not found.";
 }
 
-    public static void fullReport() {
-        for (int i = 0; i < storedMessages.size(); i++) {
-            System.out.println("ID: " + messageIDs.get(i));
-            System.out.println("Recipient: " + recipients.get(i));
-            System.out.println("Hash: " + messageHashes.get(i));
-            System.out.println("Message: " + storedMessages.get(i));
-            System.out.println("----------------------");
-        }
+    public static String fullReport() {
+        StringBuilder report = new StringBuilder();
+
+    report.append("=== MESSAGE REPORT ===\n");
+
+    int size = Math.min(
+        Math.min(sentMessages.size(), messageHashes.size()),
+        recipients.size()
+    );
+
+    for (int i = 0; i < size; i++) {
+
+        report.append("Message Hash: ").append(messageHashes.get(i)).append("\n");
+        report.append("Recipient: ").append(recipients.get(i)).append("\n");
+        report.append("Message: ").append(sentMessages.get(i)).append("\n");
+        report.append("----------------------\n");
     }
+
+    return report.toString();
+}
     public static void loadStoredMessages() {
 
     // Attribution: org.json library
@@ -294,9 +307,10 @@ public String sentMessage() {
 
             JSONObject obj = new JSONObject(line);
 
-            String messageText = obj.getString("messageText");
-
-            storedMessages.add(messageText);
+            storedMessages.add(obj.getString("messageText"));
+            messageIDs.add(obj.getString("messageID"));
+            messageHashes.add(obj.getString("messageHash"));
+            recipients.add(obj.getString("recipient"));
         }
 
     } catch (IOException e) {
