@@ -186,7 +186,7 @@ else {
             case "e":
                 System.out.print("Enter Message Hash: ");
                 String hash = input.nextLine();
-                Message.deleteByHash(hash);
+                System.out.println(Message.deleteByHash(hash));
                 break;
 
             case "f":
