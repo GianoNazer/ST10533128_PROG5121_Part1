@@ -104,17 +104,17 @@ public static List<String> recipients = new ArrayList<>();
 
     String firstWord = words[0].toUpperCase();
 
-    String middleWord;
+    String hashWord = firstWord;
 
     if (words.length >= 3) {
-        middleWord = words[words.length / 2].toUpperCase(); // true middle word
-    } else if (words.length == 2) {
-        middleWord = words[1].toUpperCase();
-    } else {
-        middleWord = words[0].toUpperCase();
+        hashWord = words[words.length - 2].toUpperCase();
+
+        if (hashWord.equals("THE") && words.length >= 4) {
+            hashWord = words[words.length - 3].toUpperCase();
+        }
     }
 
-    return idPart + ":" + messageNumber + ":" + firstWord + middleWord;
+    return idPart + ":" + messageNumber + ":" + firstWord + hashWord;
 }
 
     // =========================
@@ -122,42 +122,47 @@ public static List<String> recipients = new ArrayList<>();
     // =========================
     public String sentMessage(int option) {
 
-        if (!checkMessageID()) {
-            return "Message ID is invalid.";
-        }
-
-        if (!checkRecipientCell().equals("Cell phone number successfully captured.")) {
-            return checkRecipientCell();
-        }
-
-        if (!checkMessageLength().equals("Message ready to send.")) {
-            return checkMessageLength();
-        }
-
-        switch (option) {
-            case 1:
-                sentMessages.add(messageText);
-                messageHashes.add(messageHash);
-                messageIDs.add(messageID);
-                recipients.add(recipient);
-                return "Message sent successfully.";
-
-            case 2:
-                 disregardedMessages.add(messageText);
-                 return "Press 0 to delete the message.";
-
-            case 3:
-                storedMessages.add(messageText);
-                messageHashes.add(messageHash);
-                messageIDs.add(messageID);
-                recipients.add(recipient);
-                storeMessage();
-                return "Message successfully stored.";
-
-            default:
-                return "Invalid option.";
-        }
+    if (!checkMessageID()) {
+        return "Message ID is invalid.";
     }
+
+    if (!checkRecipientCell().equals("Cell phone number successfully captured.")) {
+        return checkRecipientCell();
+    }
+
+    if (!checkMessageLength().equals("Message ready to send.")) {
+        return checkMessageLength();
+    }
+
+    switch (option) {
+
+        case 1:
+            
+            sentMessages.add(messageText);
+            messageHashes.add(messageHash);
+            messageIDs.add(messageID);
+            recipients.add(recipient);
+
+            return "Message successfully sent.";
+
+        case 2:
+            disregardedMessages.add(messageText);
+            return "Press 0 to delete the message.";
+
+        case 3:
+            storedMessages.add(messageText);
+    messageHashes.add(messageHash);
+    messageIDs.add(messageID);
+    recipients.add(recipient);
+
+    storeMessage();
+
+    return "Message successfully stored.";
+
+        default:
+            return "Invalid option.";
+    }
+}
     // =========================
 // Send Message (DEFAULT)
 // =========================
@@ -208,22 +213,29 @@ public String sentMessage() {
     // Stored messgages Sub menu
     // =========================
     public static void displayStoredMessages() {
-        for (String msg : storedMessages) {
-            System.out.println(msg);
-        }
+
+    if (storedMessages.isEmpty()) {
+        System.out.println("No stored messages.");
+        return;
     }
+
+    for (String msg : storedMessages) {
+        System.out.println(msg);
+    }
+}
 
     public static String displayLongestMessage() {
 
     String longest = "";
 
-    for (String msg : sentMessages) {
+    for (String msg : storedMessages) {
 
-        if (msg.length() > longest.length()) {
+        if (msg != null && msg.length() > longest.length()) {
             longest = msg;
         }
     }
 
+    System.out.println(longest);
     return longest;
 }
 
@@ -233,9 +245,16 @@ public String sentMessage() {
 
         if (messageIDs.get(i).equals(id)) {
 
-            if (i < sentMessages.size()) {
-                return sentMessages.get(i);
+            String msg = "";
+
+            if (i < storedMessages.size()) {
+                msg = storedMessages.get(i);
+            } else if (i < storedMessages.size()) {
+                msg = storedMessages.get(i);
             }
+
+            System.out.println(msg);
+            return msg;
         }
     }
 
@@ -250,8 +269,8 @@ public String sentMessage() {
 
         if (recipients.get(i).equals(recipient)) {
 
-            if (i < sentMessages.size()) {
-                results.append(sentMessages.get(i)).append("\n");
+            if (i < storedMessages.size()) {
+                results.append(storedMessages.get(i)).append("\n");
             }
         }
     }
@@ -260,6 +279,7 @@ public String sentMessage() {
         return "No messages found for recipient.";
     }
 
+    System.out.println(results);
     return results.toString();
 }
 
@@ -269,19 +289,12 @@ public String sentMessage() {
 
         if (messageHashes.get(i).equals(hash)) {
 
-            String deletedMessage = "";
+            String deletedMessage = storedMessages.get(i);
 
-            if (i < sentMessages.size()) {
-                deletedMessage = sentMessages.get(i);
-                sentMessages.remove(i);
-            }
-
-            messageHashes.remove(i);
-            messageIDs.remove(i);
-
-            if (i < recipients.size()) {
-                recipients.remove(i);
-            }
+storedMessages.remove(i);
+messageHashes.remove(i);
+messageIDs.remove(i);
+recipients.remove(i);
 
             return "Message: " + deletedMessage + " successfully deleted.";
         }
@@ -293,32 +306,28 @@ public String sentMessage() {
     public static String fullReport() {
 
     StringBuilder report = new StringBuilder();
-
     report.append("=== Message Report ===\n");
 
-    int size = Math.min(
-            sentMessages.size(),
-            Math.min(messageHashes.size(), recipients.size())
-    );
+    int size = Math.min(storedMessages.size(),
+            Math.min(messageHashes.size(), recipients.size()));
 
-    for (int i = 0; i < size; i++) {
+for (int i = 0; i < size; i++) {
 
         report.append("Message Hash: ")
-              .append(messageHashes.get(i))
-              .append("\n");
+              .append(messageHashes.get(i)).append("\n");
 
         report.append("Recipient: ")
-              .append(recipients.get(i))
-              .append("\n");
+              .append(recipients.get(i)).append("\n");
 
         report.append("Message: ")
-              .append(sentMessages.get(i))
-              .append("\n");
+              .append(storedMessages.get(i)).append("\n");
 
         report.append("----------------------\n");
     }
 
-    return report.toString();
+    String output = report.toString();
+    System.out.println(output);
+    return output;
 }
     public static void loadStoredMessages() {
 
