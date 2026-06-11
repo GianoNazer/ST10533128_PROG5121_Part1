@@ -143,7 +143,7 @@ public static List<String> recipients = new ArrayList<>();
             messageIDs.add(messageID);
             recipients.add(recipient);
 
-            return "Message successfully sent.";
+            return "Message sent successfully.";
 
         case 2:
             disregardedMessages.add(messageText);
@@ -229,7 +229,6 @@ public String sentMessage() {
     String longest = "";
 
     for (String msg : storedMessages) {
-
         if (msg != null && msg.length() > longest.length()) {
             longest = msg;
         }
@@ -239,22 +238,17 @@ public String sentMessage() {
     return longest;
 }
 
-    public static String searchByMessageID(String id) {
+   public static String searchByMessageID(String id) {
 
     for (int i = 0; i < messageIDs.size(); i++) {
 
         if (messageIDs.get(i).equals(id)) {
 
-            String msg = "";
-
             if (i < storedMessages.size()) {
-                msg = storedMessages.get(i);
-            } else if (i < storedMessages.size()) {
-                msg = storedMessages.get(i);
+                String msg = storedMessages.get(i);
+                System.out.println(msg);
+                return msg;
             }
-
-            System.out.println(msg);
-            return msg;
         }
     }
 
@@ -279,8 +273,9 @@ public String sentMessage() {
         return "No messages found for recipient.";
     }
 
-    System.out.println(results);
-    return results.toString();
+    String output = results.toString().trim();
+    System.out.println(output);
+    return output;
 }
 
     public static String deleteByHash(String hash) {
