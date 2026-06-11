@@ -19,7 +19,7 @@ public class Login {
     public boolean checkUsername(String username) {
         return username.contains("_")&& username.length() <=5;
     }
-     //Passowrd Validation
+     //Password Validation
      public boolean checkPasswordComplexity(String password) {
          boolean hasCapital = false;
          boolean hasNumber = false;
