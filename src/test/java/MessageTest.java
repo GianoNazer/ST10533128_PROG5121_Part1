@@ -18,9 +18,11 @@ public class MessageTest {
 
         // Clear arrays before each test 
         Message.sentMessages.clear();
+        Message.storedMessages.clear();
+        Message.disregardedMessages.clear();
         Message.messageHashes.clear();
         Message.messageIDs.clear();
-        Message.recipients.clear();
+         Message.recipients.clear();
 
         // =========================
         // MESSAGE 1 (SENT)
