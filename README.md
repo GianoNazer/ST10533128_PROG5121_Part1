@@ -1,6 +1,6 @@
-# 📱 Chat Application – Part 3
+# Chat Application – Part 3
 
-## 👤 Student Information
+##  Student Information
 
 - **Name:** Giano Nazer 
 - **Student Number:** ST10533128
